@@ -1,0 +1,21 @@
+{
+  "name": "fisx-command-init",
+  "version": "0.1.0",
+  "description": "scaffold utilities for fisx",
+  "main": "index.js",
+  "keywords": [
+    "fis3",
+    "init",
+    "fisx"
+  ],
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "sparklewhy@gmail.com",
+  "license": "ISC",
+  "dependencies": {
+    "bluebird": "^2.10.2",
+    "findup": "^0.1.5",
+    "fis-scaffold-kernel": "^0.1.0"
+  }
+}
