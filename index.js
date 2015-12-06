@@ -25,9 +25,7 @@ exports.desc = 'init project scaffold with the specified template type';
 exports.options = {
     '-h, --help': 'print this help message',
     '-r, --root <path>': 'set project root',
-    '-s, --source <source>': 'the source type to load template, support github|gitlab|lights',
-    '-f, --force': 'force init the project and overwrite the existed file',
-    '-u, --use <type>': 'use the specified technique'
+    '--force': 'force init the project and overwrite the existed file'
 };
 
 /**
@@ -62,9 +60,8 @@ function initProjectRoot(fisConfigFile, options) {
     ).then(
         function (dir) {
             if (!util.isEmptySync(dir) && !options.force) {
-                var reason = 'the inited director ' + dir + ' is not empty'
-                    + ', if you want to force initialize, please use `-f` option.';
-                fis.log.error(reason);
+                var reason = 'The inited director ' + dir + ' is not empty'
+                    + ', if you want to force initialize, please use `--force` option.';
                 return Promise.reject(reason);
             }
 
@@ -85,11 +82,16 @@ function initProjectRoot(fisConfigFile, options) {
  * @return {string} 返回拷贝到的目标目录
  */
 function readTemplateFromLocal(scaffold, options) {
-    var localTplDir = options.localTplDir;
-    var tpl = options.template;
+    // read environment variable: FISX_TEMPLATE
+    var LOCAL_TPL_DIR = (options.solutionName + '_' + 'template').toUpperCase();
+    var localTplDir = process.env[LOCAL_TPL_DIR];
+
+    var tpl = options.template.uri;
     var isRelativePath = (/^\.+/.test(tpl) || !localTplDir);
     var sourceDir = isRelativePath ? path.resolve(tpl) : path.join(localTplDir, tpl);
     var tmpDir = fis.project.getTempPath('template', _.md5(sourceDir));
+
+    fis.log.info('read template from local: %s', sourceDir);
 
     // 删除旧的临时目录
     _.del(tmpDir);
@@ -109,30 +111,34 @@ function downloadTemplate(scaffold, options) {
     fis.log.info('Init project in dir: %s', options.root);
 
     // 如果下载来源是本地，直接从本地读取，拷贝到临时目录
-    if (options.source === 'local') {
+    var template = options.template;
+    if (template.isLocal) {
         return readTemplateFromLocal(scaffold, options);
     }
 
     return new Promise(function (resolve, reject) {
-        var repos = options.template;
+        var repos = template.uri;
 
         // 如果模板仓库名称不包含 `/` 则使用 `scaffold.namespace` 为前缀
-        // e.g., template 值为 fis-scaffold/jello-demo, 仓库名不变
-        // template 值为 pc，仓库名为：<scaffold.namespace>/pc
-        if (!~repos.indexOf('/')) {
-            repos = fis.config.get('scaffold.namespace', 'ecomfe/fisx-scaffold')
-            + '/' + repos;
+        // e.g., template 值为 fis-scaffold/jello-demo, 仓库名还是：fis-scaffold/jello-demo
+        // template 值为 pc，仓库名则为：<scaffold.namespace>/pc
+        if (repos.indexOf('/') === -1) {
+            repos = fis.config.get('scaffold.namespace', 'fisx-scaffold')
+                + '/' + repos;
         }
 
         var SimpleTick = require('./lib/tick.js');
         var loading;
+        fis.log.info('download %s...', repos);
         scaffold.download(repos, function (error, location) {
             if (error) {
-                return reject(error);
+                reject(error);
+            }
+            else {
+                resolve(location);
             }
 
             loading.clear();
-            resolve(location);
         }, function () {
             loading = loading || new SimpleTick('downloading `' + repos + '` ');
             loading.tick();
@@ -320,7 +326,7 @@ function installNPMDependence(options, info) {
         }
     }
     catch (ex) {
-        fis.log.error(ex);
+        fis.log.warn(ex);
     }
 
     return info;
@@ -352,7 +358,8 @@ function installProjectComponents(options, solutionName, info) {
         install.stderr.pipe(process.stderr);
 
         install.on('error', function (reason) {
-            reject(reason);
+            fis.log.warn(reason);
+            resolve(info);
         });
 
         install.on('close', function () {
@@ -361,27 +368,79 @@ function installProjectComponents(options, solutionName, info) {
     });
 }
 
+/**
+ * 模板类型常量
+ *
+ * @const
+ */
+var TEMPLATE_TYPE = {
+    LOCAL: 'local',
+    GITHUB: 'github',
+    GITLAB: 'gitlab',
+    LIGHTS: 'lights'
+};
+
+/**
+ * 解析模板的源
+ *
+ * @param {string} value 模板的源
+ * @return {{type: string, uri: string, isLocal: boolean}}
+ */
+function parseTemplateSource(value) {
+    var type;
+    var uri;
+
+    if (!value) {
+        fis.log.error('template type is not allowed empty.');
+        return;
+    }
+    else if (/^http(s)?:\/\//.test(value)) {
+        fis.log.error('init from remote url is not supported.');
+        return;
+    }
+    else if (/^\.+/.test(value)) {
+        type = TEMPLATE_TYPE.LOCAL;
+        uri = value;
+    }
+    else {
+        var segments = value.split(':');
+        if (segments.length > 1) {
+            type = segments.shift();
+            uri = segments.join(':');
+        }
+        else {
+            type = fis.config.get('scaffold.source', TEMPLATE_TYPE.GITHUB);
+            uri = value;
+        }
+    }
+
+    type = type.toLowerCase();
+    return {
+        type: type,
+        uri: uri,
+        isLocal: type === TEMPLATE_TYPE.LOCAL
+    };
+}
+
 exports.run = function (argv, cli, env) {
     if (argv.h || argv.help) {
         return cli.help(exports.name, exports.options);
     }
 
-    var source = argv.s || argv.source || 'github';
     var solutionName = env.modulePackage.name;
-    var LOCAL_TPL_DIR = (solutionName + '_' + 'template').toUpperCase();
+    var templateInfo = parseTemplateSource(argv._[1]);
     var options = {
-        source: source,
-        localTplDir: process.env[LOCAL_TPL_DIR],
+        solutionName: env.modulePackage.name,
         root: env.cwd,
-        template: argv._[1] || 'pc',
+        template: templateInfo,
         force: argv.force || argv.f
     };
 
     var Scaffold = require('fis-scaffold-kernel');
     var scaffold = new Scaffold({
-        type: source,
+        type: !templateInfo.isLocal && templateInfo.type,
         log: {
-            level: 0
+            level: 0x0010
         }
     });
 
@@ -395,6 +454,9 @@ exports.run = function (argv, cli, env) {
         .then(installProjectComponents.bind(this, options, solutionName))
         .then(function () {
             fis.log.info('Init project done.\n');
+        }).catch(function (err) {
+            fis.log.warn(err);
+            fis.log.info('Init project fail.\n');
         });
 };
 
