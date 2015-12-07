@@ -15,6 +15,7 @@
   "license": "ISC",
   "dependencies": {
     "bluebird": "^2.10.2",
+    "etpl": "^3.0.1",
     "findup": "^0.1.5",
     "fis-scaffold-kernel": "^0.1.0"
   }
