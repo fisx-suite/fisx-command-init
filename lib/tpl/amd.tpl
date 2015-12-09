@@ -1,6 +1,6 @@
 /**
- * @file ${description=[Please input file description]}
- * @author ${author}
+ * @file ${#description=[Please input file description]#}
+ * @author ${#author#}
  */
 
 define(function (require) {
