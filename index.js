@@ -12,17 +12,20 @@ exports.options = {
     '-r, --root <path>': 'set project root',
     '--force': 'force init the project and overwrite the existed file'
 };
-exports.commands = {
-    html: 'init html template',
-    js: 'init js template',
-    amd: 'init amd template',
-    spa: 'init single page application',
-    mspa: 'init mobile single page application',
-    miso: 'init mobile isomorphic application',
-    smarty: 'init smarty project'
-};
+
+function getTplSubCommands(builtinTypes) {
+    var cmd = {};
+    builtinTypes.forEach(function (item) {
+        cmd[item.type] = item.descr;
+    });
+    return cmd;
+}
 
 exports.run = function (argv, cli, env) {
+    var builtinTpl = require('./lib/builtin-tpl');
+    builtinTpl.init();
+    exports.commands = getTplSubCommands(builtinTpl.getBuilitinTplTypes());
+
     if (argv.h || argv.help) {
         return cli.help(exports.name, exports.options, exports.commands);
     }
@@ -37,6 +40,8 @@ exports.run = function (argv, cli, env) {
     var cmdArgs = argv._;
     cmdArgs.shift();
 
+    options.cmdArgs = cmdArgs;
+    options.rawArgv = argv;
     if (cmdArgs.length > 1) {
         // 初始化要拷贝到的目标文件位置
         options.target = path.resolve(options.root, cmdArgs[1]);
