@@ -11,12 +11,19 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/wuhy/fisx-command-init.git"
+  },
+  "bugs": {
+    "url": "http://github.com/wuhy/fisx-command-init/issues"
+  },
   "author": "sparklewhy@gmail.com",
   "license": "ISC",
   "dependencies": {
     "bluebird": "^2.10.2",
     "etpl": "^3.0.1",
     "findup": "^0.1.5",
-    "fis-scaffold-kernel": "^0.1.0"
+    "fis-scaffold-kernel": "^0.1.1"
   }
 }
