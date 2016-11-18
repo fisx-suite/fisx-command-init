@@ -64,7 +64,7 @@ exports.run = function (argv, cli, env) {
         }
     });
     options.variables = variables;
-    
+
     // 初始化模板的开始、结束界定符号
     var bDelimiter = argv.begin || argv.b;
     var eDelimiter = argv.end || argv.e;
