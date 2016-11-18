@@ -5,13 +5,15 @@
 
 var path = require('path');
 
-exports.name = 'init [command|template] [filename] [options]\n'
-    + '             init [local dir|url]';
+exports.name = 'init [command|template] [filename] [options|varOptions]\n'
+    + '             init [local dir|url] [options|varOptions]';
 exports.desc = 'init project/file scaffold with the specified template type';
 exports.options = {
     '-h, --help': 'print this help message',
     '-r, --root <path>': 'set project root',
-    '--force': 'force init the project and overwrite the existed file'
+    '--force': 'force init the project and overwrite the existed file',
+    '-b, --begin <delimiter>': 'set template variable begin delimiter',
+    '-e, --end <delimiter>': 'set template variable end delimiter'
 };
 
 function getTplSubCommands(builtinTypes) {
@@ -62,6 +64,12 @@ exports.run = function (argv, cli, env) {
         }
     });
     options.variables = variables;
+    
+    // 初始化模板的开始、结束界定符号
+    var bDelimiter = argv.begin || argv.b;
+    var eDelimiter = argv.end || argv.e;
+    var template = require('./lib/template');
+    template.setTemplateVariableDelimiter(bDelimiter, eDelimiter);
 
     var scaffold = require('./lib/scaffold');
     scaffold.init(cmdArgs[0], options);
