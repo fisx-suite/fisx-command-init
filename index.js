@@ -53,6 +53,16 @@ exports.run = function (argv, cli, env) {
         fis.log.info('Init default project template');
     }
 
+    // 初始化从命令行传递进来的变量值信息
+    var reservedKeys = ['force', 'f', '_'];
+    var variables = {};
+    Object.keys(argv).forEach(function (key) {
+        if (reservedKeys.indexOf(key) === -1) {
+            variables[key] = argv[key];
+        }
+    });
+    options.variables = variables;
+
     var scaffold = require('./lib/scaffold');
     scaffold.init(cmdArgs[0], options);
 };
