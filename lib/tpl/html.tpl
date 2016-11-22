@@ -11,8 +11,15 @@
     <title>${#title#}</title>
 </head>
 <body>
-    <!-- if: ${#useEsl=true#} -->
+    <!#-- if: ${#useEsl=true#} --#>
     <script src="http://s1.bdstatic.com/r/www/cache/ecom/esl/2-1-0/esl.js"></script>
-    <!-- /if -->
+    <!#-- /if --#>
+    <!#-- if: ${#useEsl=true#} --#>
+    <script>
+        require(['main'], function (main) {
+            // init entry
+        });
+    </script>
+    <!#-- /if --#>
 </body>
 </html>

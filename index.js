@@ -12,6 +12,7 @@ exports.options = {
     '-h, --help': 'print this help message',
     '-r, --root <path>': 'set project root',
     '--force': 'force init the project and overwrite the existed file',
+    '--latest': 'force init using latest template',
     '-b, --begin <delimiter>': 'set template variable begin delimiter',
     '-e, --end <delimiter>': 'set template variable end delimiter'
 };
@@ -37,7 +38,8 @@ exports.run = function (argv, cli, env) {
         solutionName: env.modulePackage.name,
         fisConfigFile: env.configNameSearch[0],
         root: env.cwd,
-        force: argv.force || argv.f
+        force: argv.force || argv.f,
+        latest: !!argv.latest
     };
 
     var cmdArgs = argv._;

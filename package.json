@@ -22,8 +22,10 @@
   "license": "ISC",
   "dependencies": {
     "bluebird": "^3.4.6",
+    "debug": "^2.3.3",
     "etpl": "^3.2.0",
     "findup": "^0.1.5",
-    "fis-scaffold-kernel": "^0.2.0"
+    "glob.js": "^0.1.0",
+    "fisx-package": "^0.1.0"
   }
 }
