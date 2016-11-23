@@ -12,10 +12,12 @@ fisx init # using the default project template to init project
 fisx init spa # init spa project template
 fisx init spa --force # force init the not empty project directory
 fisx init gitlab:xx/xx # init project using the template from gitlab
-fisx inti github:xx/xx # init project using the template from github
-fisx init lights:xx/xx # init project using the template from lights
+fisx init github:xx/xx # init project using the template from github
 fisx init ./xx/xx # init project from local template
+fisx init npm:xx@1.0.0 # specify the scaffold version
 ```
+
+The init source syntax is the same as [fisx package install](https://github.com/wuhy/fisx-command-install)
 
 If using gitlab, some custom options you can configure:
 
@@ -69,6 +71,20 @@ Default builtin template is [fisx-scaffold](https://github.com/fisx-scaffold). Y
 
     ```javascript
     fis.set('scaffold.namespace', 'myrepos');
+    ```
+
+* Custom the scaffold source type
+
+By default, the default source type is `GitHub`, using the following setting to change:
+
+    ```javascript
+    fis.set('scaffold.source', {
+        value: 'gitlab',
+        options: function () {
+            token: 'xx',
+            domain: 'http://xx.gitlab.com'
+        }
+    });
     ```
 
 ## Template variable
