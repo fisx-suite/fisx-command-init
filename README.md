@@ -75,7 +75,7 @@ Default builtin template is [fisx-scaffold](https://github.com/fisx-scaffold). Y
 
 * Custom the scaffold source type
 
-By default, the default source type is `GitHub`, using the following setting to change:
+    By default, the default source type is `GitHub`, using the following setting to change:
 
     ```javascript
     fis.set('scaffold.source', {
