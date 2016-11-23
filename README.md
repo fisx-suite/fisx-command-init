@@ -39,6 +39,16 @@ fisx init js app.js # create js file
 fisx init -h
 ```
 
+### Force use the latest scaffold
+
+If your scaffold is from remote, and you want to disable the local cache and fetch the latest to init, you can use `--latest` options.
+
+```shell
+fisx init --latest
+```
+
+###
+
 ## Custom builtin template
 
 Default builtin template is [fisx-scaffold](https://github.com/fisx-scaffold). You can custom the builtin template type:
@@ -87,7 +97,7 @@ Default builtin template is [fisx-scaffold](https://github.com/fisx-scaffold). Y
     });
     ```
 
-## Template variable
+## Template syntax
 
 ### Syntax of variable
 
@@ -99,6 +109,8 @@ Default builtin template is [fisx-scaffold](https://github.com/fisx-scaffold). Y
 
 * The template is rendered by template engine [etpl](https://github.com/ecomfe/etpl), so it supports the syntax like conditional expression defined in `etpl`.
 
+* The command open and close syntax: `<!#--` and `--#>` .
+
 * You can use the template variable in file name or file content.
 
 ### Builtin template variable
@@ -107,11 +119,22 @@ Default builtin template is [fisx-scaffold](https://github.com/fisx-scaffold). Y
 
 * date: the date format is like `YYYY/m/d`
 
+* name: the project name, by default using the project director name
+
 * custom your template variable
 
-    ```javascript
-    fis.set('template.xxx', function () {
-        return 'xxx';
-    });
-    fis.set('template.xxx', 'xxx');
-    ```
+    * using the config
+    
+        ```javascript
+        fis.set('template.xxx', function () {
+            return 'xxx';
+        });
+        fis.set('template.xxx', 'xxx');
+        ```
+    
+    * using the command args
+    
+        ```shell
+        fisx init xx --author xxx@xx.com
+        
+        ```
