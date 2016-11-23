@@ -13,8 +13,8 @@ exports.options = {
     '-r, --root <path>': 'set project root',
     '--force': 'force init the project and overwrite the existed file',
     '--latest': 'force init using latest template',
-    '-b, --begin <delimiter>': 'set template variable begin delimiter',
-    '-e, --end <delimiter>': 'set template variable end delimiter'
+    '--begin <delimiter>': 'set template variable begin delimiter',
+    '--end <delimiter>': 'set template variable end delimiter'
 };
 
 function getTplSubCommands(builtinTypes) {
@@ -68,8 +68,8 @@ exports.run = function (argv, cli, env) {
     options.variables = variables;
 
     // 初始化模板的开始、结束界定符号
-    var bDelimiter = argv.begin || argv.b;
-    var eDelimiter = argv.end || argv.e;
+    var bDelimiter = argv.begin;
+    var eDelimiter = argv.end;
     var template = require('./lib/template');
     template.setTemplateVariableDelimiter(bDelimiter, eDelimiter);
 
