@@ -14,7 +14,10 @@ exports.options = {
     '--force': 'force init the project and overwrite the existed file',
     '--latest': 'force init using latest template',
     '--begin <delimiter>': 'set template variable begin delimiter',
-    '--end <delimiter>': 'set template variable end delimiter'
+    '--end <delimiter>': 'set template variable end delimiter',
+    '--domain <url>': 'set the git domain',
+    '--token <string>': 'set the git token',
+    '--registry <url>': 'set the npm default registry to use'
 };
 
 function getTplSubCommands(builtinTypes) {
@@ -39,7 +42,10 @@ exports.run = function (argv, cli, env) {
         fisConfigFile: env.configNameSearch[0],
         root: env.cwd,
         force: argv.force || argv.f,
-        latest: !!argv.latest
+        latest: !!argv.latest,
+        token: argv.token,
+        domain: argv.domain,
+        registry: argv.registry
     };
 
     var cmdArgs = argv._;
