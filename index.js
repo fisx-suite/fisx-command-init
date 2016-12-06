@@ -5,9 +5,8 @@
 
 var path = require('path');
 
-exports.name = 'init [command|template] [filename] [options|varOptions]\n'
-    + '             init [local dir|url] [options|varOptions]';
-exports.desc = 'init project/file scaffold with the specified template type';
+exports.name = 'init [command|template] [filename] [options|varOptions]';
+exports.desc = 'init project/file scaffold';
 exports.options = {
     '-h, --help': 'print this help message',
     '-r, --root <path>': 'set project root',
