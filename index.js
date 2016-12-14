@@ -47,6 +47,14 @@ exports.run = function (argv, cli, env) {
         registry: argv.registry
     };
 
+    if (!require('./lib/util').isEmptySync(options.root) && !options.force) {
+        fis.log.warn(
+            'The given dir: %s is not empty, use `--force` option to force init',
+            options.root
+        );
+        return;
+    }
+
     var cmdArgs = argv._;
     cmdArgs.shift();
 
