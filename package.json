@@ -1,6 +1,6 @@
 {
   "name": "fisx-command-init",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "scaffold utilities for fisx",
   "main": "index.js",
   "keywords": [
