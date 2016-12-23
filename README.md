@@ -1,6 +1,8 @@
 fisx-command-init
 ========
 
+[![Dependency Status](https://david-dm.org/wuhy/fisx-package.svg)](https://david-dm.org/wuhy/fisx-command-init) [![devDependency Status](https://david-dm.org/wuhy/fisx-command-init/dev-status.svg)](https://david-dm.org/wuhy/fisx-command-init#info=devDependencies) [![NPM Version](https://img.shields.io/npm/v/fisx-command-init.svg?style=flat)](https://npmjs.org/package/fisx-command-init)
+
 > Init project or files using the given tempalte.
 
 ## How to use

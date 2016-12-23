@@ -21,12 +21,12 @@
   "author": "sparklewhy@gmail.com",
   "license": "ISC",
   "dependencies": {
-    "bluebird": "^3.4.6",
+    "bluebird": "^3.4.7",
     "command-exists": "^1.0.2",
-    "debug": "^2.3.3",
+    "debug": "^2.5.1",
     "etpl": "^3.2.0",
     "findup": "^0.1.5",
-    "fisx-package": "^0.1.0",
+    "fisx-package": "^0.2.0",
     "glob.js": "^0.1.0"
   }
 }
